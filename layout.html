@@ -9,12 +9,15 @@
   <body>
     <div id="container">
       <div id="header">
+
         <ul>
           <li><img src="logo.gif" alt="hacker-news-logo" style="height: 23px"></li>
-          <li class="header-list"><b>Hacker News</b></li>
-          <li class="header-list"><span>new | comments | show | ask | jobs | submit</span></li>
+          <ul>
+            <li class="header-list"><b>Hacker News</b></li>
+            <li class="header-list"><span>new | comments | show | ask | jobs | submit</span></li>
+          </ul>
         </ul>
-
+      <p id="login">login</p>
       </div>
       <div id="content">
         <ol id=contents></ol>
@@ -108,11 +111,11 @@
 
         //  Title Line
         urlParse.href = data.url
-        titleDiv.innerHTML =`<i class="fa fa-caret-up"></i> <a href='#{data.url}'>${data.title}</a> (<span class="url">${cleanURL(urlParse.hostname)}</span>)`
+        titleDiv.innerHTML =`<i class="fa fa-caret-up"></i> <a href='#{data.url}' class="title">${data.title}</a> (<span class="url">${cleanURL(urlParse.hostname)}</span>)`
 
         // Lower Line
         let date = timeSince(new Date((data.time)*1000))
-        lowerDiv.innerHTML = `<span class="info-bar">${data.score} points by ${data.by} ${date} ago | hide | ${data.descendants} comments</span>`
+        lowerDiv.innerHTML = `<span class="info-bar">${data.score} points by ${data.by} ${date} ago | hide | <a href="https://news.ycombinator.com/item?id=${id}" class="light-gray">${data.descendants} comments</a></span>`
 
         append(li, titleDiv)
         append(li, lowerDiv)
