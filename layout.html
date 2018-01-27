@@ -14,7 +14,7 @@
           <li><img src="logo.gif" alt="hacker-news-logo" style="height: 23px"></li>
           <ul>
             <li class="header-list"><b>Hacker News</b></li>
-            <li class="header-list"><span>new | comments | show | ask | jobs | submit</span></li>
+            <li class="header-list"><span><a href="https://news.ycombinator.com/new">new</a> | <a href="https://news.ycombinator.com/newcomments">comments</a> | <a href="https://news.ycombinator.com/show">show</a> | <a href="https://news.ycombinator.com/ask">ask</a> | <a href="https://news.ycombinator.com/jobs">jobs</a> | <a href="https://news.ycombinator.com/submit">submit</a></span></li>
           </ul>
         </ul>
       <p id="login">login</p>
@@ -49,6 +49,7 @@
       return url;
     }
 
+    // Date Formatting
     function timeSince(date) {
       if (typeof date !== 'object') {
         date = new Date(date);
@@ -160,7 +161,7 @@
   };
 
 
-
+  // On Load
    if (window.addEventListener) window.addEventListener("load", autorun, false);
    else if (window.attachEvent) window.attachEvent("onload", autorun);
    else window.onload = autorun

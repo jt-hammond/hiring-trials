@@ -3,7 +3,6 @@ body {
   font-size: 13px;
 }
 
-
 #container {
   width: 85%;
   background-color: rgb(246, 246, 239);
@@ -12,6 +11,10 @@ body {
   margin-top: 8px;
 }
 
+
+
+/*Header Bar*/
+
 #login {
   float: right;
   margin: 0;
@@ -19,9 +22,6 @@ body {
   padding: 4px;
 }
 
-li {
-  margin-bottom: 5px;
-}
 
 #header {
   background-color: #fe6600;
@@ -52,36 +52,47 @@ ul ul li {
   vertical-align: middle;
 }
 
-.header-list {
-  font-size: 13px;
-  padding-bottom: 3px;
-  margin-right: 5px;
-}
-
-.title {
+ul a {
   color: black;
-  font-size: 13px;
 }
 
 a {
   text-decoration: none;
 }
 
-.light-gray {
-  color: #828282;
+li img {
+  vertical-align: middle;
+  margin-top: auto;
+  margin-bottom: auto;
+  float: left;
+  margin-right: 0;
+}
+
+.header-list {
+  font-size: 13.5px;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  margin-right: 5px;
+  line-height: 16px;
+  margin-left: -3px;
+}
+
+/*Content*/
+
+li {
+  margin-bottom: 10px;
+}
+
+li div {
+  margin-top: -3px;
 }
 
 a:hover {
   cursor: pointer;
 }
 
-.info-bar {
-  font-size: 9px;
-  padding-left: 10px;
-}
-
-.url {
-  font-size: 10px;
+i {
+  font-weight: bold;
 }
 
 ol {
@@ -91,12 +102,27 @@ ol {
   padding-left: 33px;
 }
 
-li img {
-  vertical-align: middle;
-  margin-top: auto;
-  margin-bottom: auto;
-  float: left;
+.light-gray {
+  color: #828282;
 }
+
+.info-bar {
+  font-size: 9px;
+  padding-left: 12px;
+}
+
+.url {
+  font-size: 10px;
+}
+
+.title {
+  color: black;
+  font-size: 13px;
+  line-height: 16px;
+}
+
+
+/*Responsive*/
 
 @media (max-width:600px) {
   #container {
