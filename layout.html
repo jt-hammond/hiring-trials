@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>title</title>
+  <link rel="stylesheet" href="stylesheet.css" type="text/css">
+  </head>
+  <body>
+    <div id="header">
+
+    </div>
+    <div id="content">
+
+    </div>
+
+  <script type="text/javascript">
+    let request = new XMLHttpRequest();
+    let url = `https://hacker-news.firebaseio.com/v0/`;
+
+   // HN API Call to get top stories
+    function autorun(){
+      request.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+          let response = JSON.parse(this.responseText);
+          hncall(response, 0);
+          }
+        }
+
+      request.open("GET", (url + 'topstories.json?print=pretty'), true);
+      request.send();
+    }
+
+
+    function hncall(response, n) {
+      response.slice(n, (n + 30))
+      for ( let id of response ) {
+        request.onreadystatechange = function() {
+        if (this.readyState === 4 && this.status === 200) {
+            let id_response = JSON.parse(this.responseText);
+            appendToPage(id_response);
+          }
+        }
+
+        request.open("GET", (url + 'item/' + id), true);
+        request.send();
+      }
+
+      function appendToPage(response) {
+        getElementsBy
+        // DOM property to add to the page below the last item in the ordered list
+      }
+    }
+
+   function refresh() {
+      // Logic to Refresh when near the bottom of the page
+   }
+   if (window.addEventListener) window.addEventListener("load", autorun, false);
+   else if (window.attachEvent) window.attachEvent("onload", autorun);
+   else window.onload = autorun();
+  </script>
+  </body>
+</html>
