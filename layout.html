@@ -22,6 +22,7 @@
 
   <script type="text/javascript">
     let url = `https://hacker-news.firebaseio.com/v0/`;
+    let processing
 
     // Helper Functions
     function createNode(element) {
@@ -88,7 +89,7 @@
    // HMakes stories
 
     function makeStory(id) {
-      fetch(url + 'item/' + id + '.json?print=pretty').then(
+      fetch(url + 'item/' + id + '.json?print=pretty' + Math.random()).then(
       function(response){
        if (response.status !== 200) {
         console.log('Looks like there was a problem. Status Code: ' +
@@ -126,29 +127,22 @@
         return;
       }
       response.json().then(function(data) {
+        bestStories = data;
         refresh(data);
-        run(data);
+        document.addEventListener("scroll", function(event) {
+          bestStories.splice(0, 30)
+          if (processing)
+              return false;
+
+          if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight){
+            processing = true;
+            refresh(bestStories)
+            processing = false;
+          };
+        });
       });
     })
   };
-
-
-  function run(bestStories) {
-    let processing
-    bestStories = bestStories.splice(0,30);
-    document.addEventListener("scroll", function(event) {
-      if (processing)
-          return false;
-
-      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight){
-        processing = true;
-        refresh(bestStories)
-        processing = false;
-      };
-    });
-  };
-
-  // Scroll Event Listener
 
   // Calls Refresh
   function refresh(stories) {
