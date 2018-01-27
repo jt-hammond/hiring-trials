@@ -1,7 +1,7 @@
 body {
   font-family: Verdana;
   color: #828282;
-  font-size: 12px;
+  font-size: 13px;
 }
 
 
@@ -56,8 +56,15 @@ a:hover {
 
 .info-bar {
   font-size: 9px;
+  padding-left: 10px;
 }
 
 .url {
   font-size: 10px;
+}
+
+ol {
+  margin-left: 0;
+  text-align: left;
+  padding-left: 25px;
 }

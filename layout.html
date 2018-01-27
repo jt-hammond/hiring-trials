@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>HackerNews Clone</title>
   <link rel="stylesheet" href="stylesheet.css" type="text/css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   </head>
   <body>
     <div id="container">
@@ -86,8 +87,9 @@
       return interval + ' ' + intervalType;
     };
 
-   // HMakes stories
 
+
+   // HMakes stories
     function makeStory(id) {
       fetch(url + 'item/' + id + '.json?print=pretty' + Math.random()).then(
       function(response){
@@ -97,13 +99,16 @@
         return;
       }
       response.json().then(function(data) {
+
+        // Create Elements
         let li = createNode('li'),
             lowerDiv = createNode('div'),
             titleDiv = createNode('div'),
             urlParse = createNode('a')
+
         //  Title Line
         urlParse.href = data.url
-        titleDiv.innerHTML =`<a href='#{data.url}'>${data.title}</a> (<span class="url">${cleanURL(urlParse.hostname)}</span>)`
+        titleDiv.innerHTML =`<i class="fa fa-caret-up"></i> <a href='#{data.url}'>${data.title}</a> (<span class="url">${cleanURL(urlParse.hostname)}</span>)`
 
         // Lower Line
         let date = timeSince(new Date((data.time)*1000))
@@ -116,8 +121,13 @@
     })
   };
 
+  // Refresh
+  function refresh(stories) {
+      let response = stories.splice(0, (30))
+      return response.map( id => makeStory(id));
+   };
 
-  // Autorun
+  // Autorun and Scroll listener
   function autorun() {
     fetch(url + 'topstories.json?print=pretty').then(
       function(response){
@@ -127,33 +137,31 @@
         return;
       }
       response.json().then(function(data) {
-        bestStories = data;
+        let bestStories = data;
         refresh(data);
+
+        // Scroll event listner and AJAX Refresh
         document.addEventListener("scroll", function(event) {
-          bestStories.splice(0, 30)
           if (processing)
               return false;
 
           if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight){
             processing = true;
             refresh(bestStories)
-            processing = false;
+            bestStories.splice(0, 30)
+            setTimeout(function(){ processing = false; }, 1000);
           };
         });
       });
     })
   };
 
-  // Calls Refresh
-  function refresh(stories) {
-      let response = stories.splice(0, (30))
-      return response.map( id => makeStory(id));
-   };
 
 
    if (window.addEventListener) window.addEventListener("load", autorun, false);
    else if (window.attachEvent) window.attachEvent("onload", autorun);
-   else window.onload = autorun();
+   else window.onload = autorun
+
   </script>
   </body>
 </html>
