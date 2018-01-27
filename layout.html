@@ -10,50 +10,134 @@
 
     </div>
     <div id="content">
-
+      <ol id=contents></ol>
     </div>
 
   <script type="text/javascript">
-    let request = new XMLHttpRequest();
     let url = `https://hacker-news.firebaseio.com/v0/`;
 
-   // HN API Call to get top stories
-    function autorun(){
-      request.onreadystatechange = function() {
-        if (this.readyState === 4 && this.status === 200) {
-          let response = JSON.parse(this.responseText);
-          hncall(response, 0);
-          }
-        }
-
-      request.open("GET", (url + 'topstories.json?print=pretty'), true);
-      request.send();
+    // Helper Functions
+    function createNode(element) {
+      return document.createElement(element);
     }
 
+    const ul = document.getElementById('contents');
 
-    function hncall(response, n) {
-      response.slice(n, (n + 30))
-      for ( let id of response ) {
-        request.onreadystatechange = function() {
-        if (this.readyState === 4 && this.status === 200) {
-            let id_response = JSON.parse(this.responseText);
-            appendToPage(id_response);
-          }
-        }
-
-        request.open("GET", (url + 'item/' + id), true);
-        request.send();
-      }
-
-      function appendToPage(response) {
-        getElementsBy
-        // DOM property to add to the page below the last item in the ordered list
-      }
+    function append(parent, el) {
+      return parent.appendChild(el);
     }
 
-   function refresh() {
-      // Logic to Refresh when near the bottom of the page
-   }
+    function cleanURL(url) {
+      if(url.match(/http:\/\//)) {
+          url = url.substring(7);
+      }
+      if(url.match(/^www\./)) {
+          url = url.substring(4);
+      }
+      return url;
+    }
+
+    function timeSince(date) {
+      let seconds = Math.floor((new Date() - date) / 1000);
+      let interval = Math.floor(seconds / 31536000);
+      if (interval > 1) {
+        return interval + " years";
+      }
+
+      interval = Math.floor(seconds / 2592000);
+      if (interval > 1) {
+        return interval + " months";
+      }
+
+      interval = Math.floor(seconds / 86400);
+      if (interval > 1) {
+        return interval + " days";
+      }
+
+      interval = Math.floor(seconds / 3600);
+      if (interval > 1) {
+        return interval + " hours";
+      }
+
+      interval = Math.floor(seconds / 60);
+      if (interval > 1) {
+        return interval + " minutes";
+      }
+      return Math.floor(seconds) + " seconds";
+    };
+
+   // HN Auutorun API Call to get top stories
+
+    function makeStory(id) {
+      fetch(url + 'item/' + id + '.json?print=pretty').then(
+      function(response){
+       if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+      response.json().then(function(data) {
+        let li = createNode('li'),
+            lowerDiv = createNode('div'),
+            titleDiv = createNode('div'),
+            urlParse = createNode('a')
+        //  Title Line
+        urlParse.href = data.url
+        titleDiv.innerHTML =`<a href='#{data.url}'>${data.title}</a> (<span>${cleanURL(urlParse.hostname)}</span>)`
+
+        // Lower Line
+        date = timeSince(new Date(Date.now() - data.time))
+        lowerDiv.innerHTML = `<span>${data.score} points by ${data.by} ${date} ago | hide | ${data.descendants} comments</span>`
+
+        append(li, titleDiv)
+        append(li, lowerDiv)
+        append(ul, li)
+      });
+    })
+  };
+
+
+  // Autorun
+  function autorun() {
+    fetch(url + 'topstories.json?print=pretty').then(
+      function(response){
+       if (response.status !== 200) {
+        console.log('Looks like there was a problem. Status Code: ' +
+          response.status);
+        return;
+      }
+      response.json().then(function(data) {
+        refresh(data);
+        run(data);
+      });
+    })
+  };
+
+
+  function run(bestStories) {
+    let processing
+    bestStories = bestStories.splice(0,30);
+    document.addEventListener("scroll", function(event) {
+      if (processing)
+          return false;
+
+      if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight){
+        processing = true;
+        refresh(bestStories)
+        processing = false;
+      };
+    });
+  };
+
+  // Scroll Event Listener
+
+  // Calls Refresh
+  function refresh(stories) {
+      let response = stories.splice(0, (30))
+      return response.map( id => makeStory(id));
+   };
+
+
    if (window.addEventListener) window.addEventListener("load", autorun, false);
    else if (window.attachEvent) window.attachEvent("onload", autorun);
    else window.onload = autorun();
